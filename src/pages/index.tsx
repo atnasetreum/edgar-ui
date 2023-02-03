@@ -65,7 +65,7 @@ function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Ferreira Enterprise.
+            MADALU Food & Drinks.
           </Typography>
           <Box
             component="form"
@@ -79,7 +79,7 @@ function Login() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Contraseña"
               type="password"
               id="password"
               autoComplete="current-password"

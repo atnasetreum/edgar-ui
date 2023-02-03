@@ -7,13 +7,16 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../contexts/auth";
 import { userTypes } from "../../constants";
+import GroupIcon from "@mui/icons-material/Group";
 
 export const MainListItems = () => {
   const router = useRouter();
   const { user } = React.useContext(AuthContext);
+
   const userType = React.useMemo(() => {
     return user?.userType;
   }, [user]);
+
   return (
     <React.Fragment>
       <ListItemButton
@@ -25,6 +28,17 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Inicio" />
       </ListItemButton>
+      {userType === userTypes.ADMIN && (
+        <ListItemButton
+          onClick={() => router.push("/users")}
+          selected={router.pathname === "/users"}
+        >
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText primary="Users" />
+        </ListItemButton>
+      )}
     </React.Fragment>
   );
 };

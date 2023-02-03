@@ -1,4 +1,7 @@
 export const userTypes = {
   ADMIN: "ADMIN",
-  DRIVER: "DRIVER",
+  SUPERVISOR: "SUPERVISOR",
+  MESERO: "MESERO",
+  COCINERO: "COCINERO",
+  MIXOLOGO: "MIXOLOGO",
 };

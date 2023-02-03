@@ -10,13 +10,13 @@ export const Copyright = (props: any) => {
       {...props}
     >
       {"Copyright © "}
-      <Link
+      {/* <Link
         color="inherit"
         target="_blank"
         href="https://www.google.com/search?q=miguel+ferreira&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjOp8SbnbT8AhU6NEQIHYh7B1oQ_AUoAXoECAEQAw&biw=1920&bih=975&dpr=1#imgrc=6nDBPXCQvl3kgM"
-      >
-        Miguel Luis Inc.
-      </Link>{" "}
+      > */}
+      MADALU Food & Drinks
+      {/* </Link>{" "} */}
       {new Date().getFullYear()}
       {"."}
     </Typography>

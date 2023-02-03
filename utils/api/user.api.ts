@@ -3,14 +3,9 @@ import { api } from "./axiosWrapper";
 
 const basePath = "/users";
 
-async function getAll() {
-  const { data } = await api.get(`${basePath}`);
+async function getAll(params: object) {
+  const { data } = await api.get(`${basePath}`, { params });
   return data as User[];
-}
-
-async function getDrivers() {
-  const { data } = await api.get(`${basePath}/drivers`);
-  return data as { id: number; name: string }[];
 }
 
 async function getUsersLogin() {
@@ -18,12 +13,13 @@ async function getUsersLogin() {
   return data as UserLogin[];
 }
 
-async function save(payload: {
-  name: string;
-  password: string;
-  idUserType: number;
-}) {
+async function create(payload: object) {
   const { data } = await api.post(`${basePath}`, payload);
+  return data as User;
+}
+
+async function update(id: number, payload: object) {
+  const { data } = await api.patch(`${basePath}/${id}`, payload);
   return data as User;
 }
 
@@ -35,7 +31,7 @@ async function remove(id: number) {
 export const UserApi = {
   getAll,
   getUsersLogin,
-  save,
+  create,
+  update,
   remove,
-  getDrivers,
 };
