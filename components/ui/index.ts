@@ -1,2 +1,2 @@
 export * from "./Copyright";
-export * from "./TableStyle";
+export * from "./tables/TableStyle";
