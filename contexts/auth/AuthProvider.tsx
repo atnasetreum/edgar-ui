@@ -45,6 +45,11 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     setLoading(true);
     try {
       const data = await AuthApi.validateToken();
+
+      if (!data?.id) {
+        throw new Error("No existe el token");
+      }
+
       localStorage.setItem("token", data.token);
       dispatch({ type: "[Auth] - Login", payload: data });
       setTimeout(() => setLoading(false), 2000);

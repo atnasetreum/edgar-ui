@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { AuthContext } from "../../contexts/auth";
 import { userTypes } from "../../constants";
 import GroupIcon from "@mui/icons-material/Group";
+import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
 
 export const MainListItems = () => {
   const router = useRouter();
@@ -36,7 +37,18 @@ export const MainListItems = () => {
           <ListItemIcon>
             <GroupIcon />
           </ListItemIcon>
-          <ListItemText primary="Users" />
+          <ListItemText primary="Usuarios" />
+        </ListItemButton>
+      )}
+      {userType === userTypes.ADMIN && (
+        <ListItemButton
+          onClick={() => router.push("/products")}
+          selected={router.pathname === "/products"}
+        >
+          <ListItemIcon>
+            <DinnerDiningIcon />
+          </ListItemIcon>
+          <ListItemText primary="Productos" />
         </ListItemButton>
       )}
     </React.Fragment>
