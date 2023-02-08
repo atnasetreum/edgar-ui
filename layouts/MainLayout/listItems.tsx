@@ -9,6 +9,31 @@ import { AuthContext } from "../../contexts/auth";
 import { userTypes } from "../../constants";
 import GroupIcon from "@mui/icons-material/Group";
 import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
+import ListItemsGroup from "./ListItemsGroup";
+import { Tooltip } from "@mui/material";
+import HistoryIcon from "@mui/icons-material/History";
+
+interface ElemListProps {
+  label: string;
+  route: string;
+  icon: JSX.Element;
+  tooltip?: string;
+}
+
+const ElemList = (params: ElemListProps) => {
+  const router = useRouter();
+  return (
+    <Tooltip title={params?.tooltip ?? ""} placement="right">
+      <ListItemButton
+        onClick={() => router.push(params.route)}
+        selected={router.pathname === params.route}
+      >
+        <ListItemIcon>{params.icon}</ListItemIcon>
+        <ListItemText primary={params.label} />
+      </ListItemButton>
+    </Tooltip>
+  );
+};
 
 export const MainListItems = () => {
   const router = useRouter();
@@ -20,43 +45,45 @@ export const MainListItems = () => {
 
   return (
     <React.Fragment>
-      <ListItemButton
-        onClick={() => router.push("/dashboard")}
-        selected={router.pathname === "/dashboard"}
-      >
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inicio" />
-      </ListItemButton>
+      <ElemList label="Inicio" route="/dashboard" icon={<DashboardIcon />} />
+
       {userType === userTypes.ADMIN && (
-        <ListItemButton
-          onClick={() => router.push("/users")}
-          selected={router.pathname === "/users"}
-        >
-          <ListItemIcon>
-            <GroupIcon />
-          </ListItemIcon>
-          <ListItemText primary="Usuarios" />
-        </ListItemButton>
+        <ListItemsGroup
+          group={{
+            label: "Productos",
+            route: "/products",
+            icon: <DinnerDiningIcon />,
+            subMenu: [
+              {
+                label: "Cat. Principales",
+                route: "/products/main-product-categories",
+                icon: <DinnerDiningIcon />,
+                tooltip: "Categorias Principales",
+              },
+              {
+                label: "Cat. Secundarias",
+                route: "/products/product-categories",
+                icon: <DinnerDiningIcon />,
+                tooltip: "Categorias Secundarias",
+              },
+              {
+                label: "Precios",
+                route: "/products/product-prices",
+                icon: <DinnerDiningIcon />,
+              },
+            ],
+          }}
+        />
       )}
       {userType === userTypes.ADMIN && (
-        <ListItemButton
-          onClick={() => router.push("/products")}
-          selected={router.pathname === "/products"}
-        >
-          <ListItemIcon>
-            <DinnerDiningIcon />
-          </ListItemIcon>
-          <ListItemText primary="Productos" />
-        </ListItemButton>
+        <ElemList label="Usuarios" route="/users" icon={<GroupIcon />} />
       )}
+      <ElemList label="Historial" route="/histories" icon={<HistoryIcon />} />
     </React.Fragment>
   );
 };
 
 export const SecondaryListItems = () => {
-  const router = useRouter();
   const { logoutUser } = React.useContext(AuthContext);
   return (
     <React.Fragment>

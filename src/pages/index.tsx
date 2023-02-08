@@ -73,7 +73,7 @@ function Login() {
             noValidate
             sx={{ mt: 1 }}
           >
-            <SelectUsers user={user} setUser={setUser} />
+            <SelectUsers value={user} onChange={setUser} />
             <TextField
               margin="normal"
               required

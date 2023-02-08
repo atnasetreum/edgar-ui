@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { User, UserType } from "ts/interfaces";
 import { useNotify } from "hooks";
 import { UserApi } from "utils/api";
+import { errorAxios } from "utils/api/errorAxios";
 
 export interface IFiltersUsers {
   id: string;
@@ -46,7 +47,7 @@ export default function UsersPage() {
       ...(filters.type && { typeId: filters.type.id }),
     })
       .then(setUsers)
-      .catch((err) => notify(err.response?.data?.message || err.message));
+      .catch((err) => errorAxios(err, notify));
   };
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export default function UsersPage() {
             setAction("");
             setForm(formInit);
           })
-          .catch((err) => notify(err.response?.data?.message || err.message));
+          .catch((err) => errorAxios(err, notify));
       } else {
         // Update
         UserApi.update(id, formData)
@@ -105,7 +106,7 @@ export default function UsersPage() {
             setForm(formInit);
             setId(0);
           })
-          .catch((err) => notify(err.response?.data?.message || err.message));
+          .catch((err) => errorAxios(err, notify));
       }
     }
   };
@@ -126,7 +127,7 @@ export default function UsersPage() {
         notify("Usuario eliminado correctamente", "success");
         getData();
       })
-      .catch((err) => notify(err.response?.data?.message || err.message));
+      .catch((err) => errorAxios(err, notify));
   };
 
   return (

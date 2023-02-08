@@ -1,5 +1,5 @@
 import { IFiltersUsers } from "@/pages/users";
-import { Grid, Paper, TextField } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import InputText from "components/ui/InputText";
 import SelectUserTypes from "components/ui/SelectUserTypes";
 

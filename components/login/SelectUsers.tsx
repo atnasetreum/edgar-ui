@@ -4,6 +4,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { styled, lighten, darken } from "@mui/system";
 import { UserLogin } from "../../ts/interfaces";
 import { UserApi } from "../../utils/api";
+import { useNotify } from "hooks";
+import { errorAxios } from "utils/api/errorAxios";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -21,17 +23,20 @@ const GroupItems = styled("ul")({
 });
 
 interface Props {
-  user: UserLogin | null;
-  setUser: (user: UserLogin | null) => void;
+  value: UserLogin | null;
+  onChange: (user: UserLogin | null) => void;
 }
 
-export const SelectUsers = ({ user, setUser }: Props) => {
+export const SelectUsers = ({ value, onChange }: Props) => {
   const [users, setUsers] = React.useState<UserLogin[]>([]);
+  const { notify } = useNotify();
 
   React.useEffect(() => {
-    UserApi.getUsersLogin().then((data) => {
-      setUsers(data);
-    });
+    UserApi.getUsersLogin()
+      .then((data) => {
+        setUsers(data);
+      })
+      .catch((err) => errorAxios(err, notify));
   }, []);
 
   return (
@@ -49,8 +54,8 @@ export const SelectUsers = ({ user, setUser }: Props) => {
           <GroupItems>{params.children}</GroupItems>
         </li>
       )}
-      value={user}
-      onChange={(_, newValue) => setUser(newValue)}
+      value={value}
+      onChange={(_, newValue) => onChange(newValue)}
     />
   );
 };
