@@ -115,7 +115,7 @@ export default function MainProductCategoriesPage() {
   };
 
   return (
-    <MainLayout title="Categorias Pricnipales">
+    <MainLayout title="Categorias Principales">
       <Grid container spacing={3}>
         {["add", "edit"].includes(action) && (
           <Grid item xs={12} md={12} lg={12}>

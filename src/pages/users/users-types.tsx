@@ -6,47 +6,43 @@ import TableUsers from "components/users/TableUsers";
 import MainLayout from "layouts/MainLayout";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { User, UserType } from "ts/interfaces";
+import { UserType } from "ts/interfaces";
 import { useNotify } from "hooks";
-import { UserApi } from "utils/api";
+import { UserTypeApi } from "utils/api";
 import { errorAxios } from "utils/api/errorAxios";
+import FormUserTypes from "components/userTypes/FormUserTypes";
+import FiltersUserTypes from "components/userTypes/FiltersUserTypes";
+import TableUserTypes from "components/userTypes/TableUserTypes";
 
-export interface IFiltersUsers {
+export interface IFiltersUserTypes {
   id: string;
-  type: UserType | null;
 }
 
-const filtersInit: IFiltersUsers = {
+const filtersInit: IFiltersUserTypes = {
   id: "",
-  type: null,
 };
 
-export interface IFormUsers {
+export interface IFormUserTypes {
   name: string;
-  type: UserType | null;
-  password: string;
 }
 
-const formInit: IFormUsers = {
+const formInit: IFormUserTypes = {
   name: "",
-  type: null,
-  password: "",
 };
 
 export default function UsersTypesPage() {
   const [action, setAction] = useState<string>("");
-  const [filters, setFilters] = useState<IFiltersUsers>(filtersInit);
-  const [form, setForm] = useState<IFormUsers>(formInit);
-  const [users, setUsers] = useState<User[]>([]);
+  const [filters, setFilters] = useState<IFiltersUserTypes>(filtersInit);
+  const [form, setForm] = useState<IFormUserTypes>(formInit);
+  const [userTypes, setUserTypes] = useState<UserType[]>([]);
   const [id, setId] = useState<number>(0);
   const { notify } = useNotify();
 
   const getData = () => {
-    UserApi.getAll({
+    UserTypeApi.getAll({
       ...(filters.id && { id: filters.id }),
-      ...(filters.type && { typeId: filters.type.id }),
     })
-      .then(setUsers)
+      .then(setUserTypes)
       .catch((err) => errorAxios(err, notify));
   };
 
@@ -61,24 +57,14 @@ export default function UsersTypesPage() {
 
   const validateForm = async () => {
     const name = form.name.trim();
-    const type = form.type;
-    const password = form.password.trim();
 
     if (!name) {
       notify("Agregue un nombre");
-      return false;
-    } else if (!type) {
-      notify("Selecione un tipo de usuario");
-      return false;
-    } else if (!password && !id) {
-      notify("Agregue una contraseña");
       return false;
     }
 
     return {
       name,
-      typeId: type.id,
-      ...(password && { password }),
     };
   };
 
@@ -88,9 +74,9 @@ export default function UsersTypesPage() {
     if (formData) {
       if (!id) {
         // Create
-        UserApi.create(formData)
+        UserTypeApi.create(formData)
           .then(() => {
-            notify("Usuario creado correctamente", "success");
+            notify("Tipo de usuario creado correctamente", "success");
             getData();
             setAction("");
             setForm(formInit);
@@ -98,9 +84,9 @@ export default function UsersTypesPage() {
           .catch((err) => errorAxios(err, notify));
       } else {
         // Update
-        UserApi.update(id, formData)
+        UserTypeApi.update(id, formData)
           .then(() => {
-            notify("Usuario creado correctamente", "success");
+            notify("Tipo de usuario actualizado correctamente", "success");
             getData();
             setAction("");
             setForm(formInit);
@@ -111,20 +97,18 @@ export default function UsersTypesPage() {
     }
   };
 
-  const editRow = (row: User) => {
+  const editRow = (row: UserType) => {
     setId(row.id);
     setForm({
       name: row.name,
-      type: row.userType,
-      password: "",
     });
     setAction("edit");
   };
 
   const deleteRow = (id: number) => {
-    UserApi.remove(id)
+    UserTypeApi.remove(id)
       .then(() => {
-        notify("Usuario eliminado correctamente", "success");
+        notify("Tipo de usuario eliminado correctamente", "success");
         getData();
       })
       .catch((err) => errorAxios(err, notify));
@@ -135,7 +119,7 @@ export default function UsersTypesPage() {
       <Grid container spacing={3}>
         {["add", "edit"].includes(action) && (
           <Grid item xs={12} md={12} lg={12}>
-            <FormUsers
+            <FormUserTypes
               form={form}
               setForm={setForm}
               closeForm={closeForm}
@@ -159,11 +143,11 @@ export default function UsersTypesPage() {
               </ButtonGroup>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-              <FiltersUsers filters={filters} setFilters={setFilters} />
+              <FiltersUserTypes filters={filters} setFilters={setFilters} />
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-              <TableUsers
-                data={users}
+              <TableUserTypes
+                data={userTypes}
                 editRow={editRow}
                 deleteRow={deleteRow}
               />
