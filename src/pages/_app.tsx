@@ -9,11 +9,15 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { AuthProvider } from "contexts/auth";
 import { store } from "store";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <AuthProvider>
+        <Head>
+          <title>MADALU Food & Drinks</title>
+        </Head>
         <Component {...pageProps} />
         <ToastContainer />
       </AuthProvider>

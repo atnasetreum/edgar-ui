@@ -65,7 +65,7 @@ function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            MADALU Food & Drinks.
+            MADALU Food & Drinks
           </Typography>
           <Box
             component="form"

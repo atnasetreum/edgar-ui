@@ -33,7 +33,7 @@ const formInit: IFormUsers = {
   password: "",
 };
 
-export default function UsersPage() {
+export default function UsersTypesPage() {
   const [action, setAction] = useState<string>("");
   const [filters, setFilters] = useState<IFiltersUsers>(filtersInit);
   const [form, setForm] = useState<IFormUsers>(formInit);
@@ -100,7 +100,7 @@ export default function UsersPage() {
         // Update
         UserApi.update(id, formData)
           .then(() => {
-            notify("Usuario actualizado correctamente", "success");
+            notify("Usuario creado correctamente", "success");
             getData();
             setAction("");
             setForm(formInit);
@@ -131,7 +131,7 @@ export default function UsersPage() {
   };
 
   return (
-    <MainLayout title="Users">
+    <MainLayout title="Tipos de usuarios">
       <Grid container spacing={3}>
         {["add", "edit"].includes(action) && (
           <Grid item xs={12} md={12} lg={12}>

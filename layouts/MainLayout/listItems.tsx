@@ -4,39 +4,19 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useRouter } from "next/router";
 import { AuthContext } from "../../contexts/auth";
 import { userTypes } from "../../constants";
-import GroupIcon from "@mui/icons-material/Group";
 import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
 import ListItemsGroup from "./ListItemsGroup";
-import { Tooltip } from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
-
-interface ElemListProps {
-  label: string;
-  route: string;
-  icon: JSX.Element;
-  tooltip?: string;
-}
-
-const ElemList = (params: ElemListProps) => {
-  const router = useRouter();
-  return (
-    <Tooltip title={params?.tooltip ?? ""} placement="right">
-      <ListItemButton
-        onClick={() => router.push(params.route)}
-        selected={router.pathname === params.route}
-      >
-        <ListItemIcon>{params.icon}</ListItemIcon>
-        <ListItemText primary={params.label} />
-      </ListItemButton>
-    </Tooltip>
-  );
-};
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import ElemList from "./ElemList";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
 
 export const MainListItems = () => {
-  const router = useRouter();
   const { user } = React.useContext(AuthContext);
 
   const userType = React.useMemo(() => {
@@ -46,37 +26,49 @@ export const MainListItems = () => {
   return (
     <React.Fragment>
       <ElemList label="Inicio" route="/dashboard" icon={<DashboardIcon />} />
-
       {userType === userTypes.ADMIN && (
-        <ListItemsGroup
-          group={{
-            label: "Productos",
-            route: "/products",
-            icon: <DinnerDiningIcon />,
-            subMenu: [
-              {
-                label: "Cat. Principales",
-                route: "/products/main-product-categories",
-                icon: <DinnerDiningIcon />,
-                tooltip: "Categorias Principales",
-              },
-              {
-                label: "Cat. Secundarias",
-                route: "/products/product-categories",
-                icon: <DinnerDiningIcon />,
-                tooltip: "Categorias Secundarias",
-              },
-              {
-                label: "Precios",
-                route: "/products/product-prices",
-                icon: <DinnerDiningIcon />,
-              },
-            ],
-          }}
-        />
-      )}
-      {userType === userTypes.ADMIN && (
-        <ElemList label="Usuarios" route="/users" icon={<GroupIcon />} />
+        <>
+          <ListItemsGroup
+            group={{
+              label: "Productos",
+              route: "/products",
+              icon: <DinnerDiningIcon />,
+              subMenu: [
+                {
+                  label: "Cat. Principales",
+                  route: "/products/main-product-categories",
+                  icon: <MenuBookIcon />,
+                  tooltip: "Categorias Principales",
+                },
+                {
+                  label: "Cat. Secundarias",
+                  route: "/products/product-categories",
+                  icon: <AutoStoriesIcon />,
+                  tooltip: "Categorias Secundarias",
+                },
+                {
+                  label: "Precios",
+                  route: "/products/product-prices",
+                  icon: <PriceChangeIcon />,
+                },
+              ],
+            }}
+          />
+          <ListItemsGroup
+            group={{
+              label: "Usuarios",
+              route: "/users",
+              icon: <AccountCircleIcon />,
+              subMenu: [
+                {
+                  label: "Tipos de usuarios",
+                  route: "/users/users-types",
+                  icon: <SupervisedUserCircleIcon />,
+                },
+              ],
+            }}
+          />
+        </>
       )}
       <ElemList label="Historial" route="/histories" icon={<HistoryIcon />} />
     </React.Fragment>

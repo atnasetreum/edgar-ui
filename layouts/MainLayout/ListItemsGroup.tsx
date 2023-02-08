@@ -35,12 +35,12 @@ export default function ListItemsGroup({ group }: { group: GroupMenu }) {
   return (
     <>
       <Tooltip title={group?.tooltip ?? ""} placement="right">
-        <ListItemButton
-          onClick={() => router.push(group.route)}
-          selected={router.pathname === group.route}
-        >
+        <ListItemButton selected={router.pathname === group.route}>
           <ListItemIcon>{group.icon}</ListItemIcon>
-          <ListItemText primary="Productos" />
+          <ListItemText
+            primary={group.label}
+            onClick={() => router.push(group.route)}
+          />
           {open ? (
             <ExpandLess onClick={handleClick} />
           ) : (
@@ -56,10 +56,12 @@ export default function ListItemsGroup({ group }: { group: GroupMenu }) {
               key={submenu.label}
               placement="right"
             >
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => router.push(submenu.route)}
+                selected={router.pathname === submenu.route}
+              >
+                <ListItemIcon>{submenu.icon}</ListItemIcon>
                 <ListItemText primary={submenu.label} />
               </ListItemButton>
             </Tooltip>
