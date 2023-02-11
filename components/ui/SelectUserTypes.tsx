@@ -15,7 +15,7 @@ export default function SelectUserTypes({ value, onChange }: Props) {
   const { notify } = useNotify();
 
   useEffect(() => {
-    UserTypeApi.getAll()
+    UserTypeApi.getAll({})
       .then(setTypes)
       .catch((err) => errorAxios(err, notify));
   }, []);
