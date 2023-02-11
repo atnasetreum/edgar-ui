@@ -2,26 +2,33 @@ import { Button, ButtonGroup, Grid } from "@mui/material";
 import InputText from "components/ui/InputText";
 import SaveIcon from "@mui/icons-material/Save";
 import ClearIcon from "@mui/icons-material/Clear";
-import { IFormMPC } from "@/pages/products/main-product-categories";
+import { IFormMP } from "@/pages/products/product-categories";
+import SelectMpc from "components/ui/SelectMpc";
 
 interface Props {
-  form: IFormMPC;
-  setForm: (form: IFormMPC) => void;
+  form: IFormMP;
+  setForm: (form: IFormMP) => void;
   closeForm: () => void;
   saveForm: () => void;
 }
 
-const FormMpc = ({ form, setForm, closeForm, saveForm }: Props) => {
+const FormMp = ({ form, setForm, closeForm, saveForm }: Props) => {
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <InputText
           label="Nombre"
           value={form.name}
           onChange={(name) => setForm({ ...form, name })}
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} lg={4}>
+        <SelectMpc
+          value={form.mpc}
+          onChange={(mpc) => setForm({ ...form, mpc })}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
         <ButtonGroup
           variant="contained"
           aria-label="outlined primary button group"
@@ -48,4 +55,4 @@ const FormMpc = ({ form, setForm, closeForm, saveForm }: Props) => {
   );
 };
 
-export default FormMpc;
+export default FormMp;

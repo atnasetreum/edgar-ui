@@ -16,10 +16,12 @@ import TableUserTypes from "components/userTypes/TableUserTypes";
 
 export interface IFiltersUserTypes {
   id: string;
+  name: string;
 }
 
 const filtersInit: IFiltersUserTypes = {
   id: "",
+  name: "",
 };
 
 export interface IFormUserTypes {
@@ -41,6 +43,7 @@ export default function UsersTypesPage() {
   const getData = () => {
     UserTypeApi.getAll({
       ...(filters.id && { id: filters.id }),
+      ...(filters.name && { name: filters.name }),
     })
       .then(setUserTypes)
       .catch((err) => errorAxios(err, notify));

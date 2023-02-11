@@ -1,13 +1,14 @@
-import { IFiltersUserTypes } from "@/pages/users/users-types";
+import { IFiltersMP } from "@/pages/products/product-categories";
 import { Grid, Paper } from "@mui/material";
 import InputText from "components/ui/InputText";
+import SelectMpc from "components/ui/SelectMpc";
 
 interface Props {
-  filters: IFiltersUserTypes;
-  setFilters: (filters: IFiltersUserTypes) => void;
+  filters: IFiltersMP;
+  setFilters: (filters: IFiltersMP) => void;
 }
 
-const FiltersUserTypes = ({ filters, setFilters }: Props) => {
+const FiltersMp = ({ filters, setFilters }: Props) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={6} lg={3}>
@@ -20,7 +21,7 @@ const FiltersUserTypes = ({ filters, setFilters }: Props) => {
           />
         </Paper>
       </Grid>
-      {/* <Grid item xs={12} md={6} lg={3}>
+      <Grid item xs={12} md={6} lg={3}>
         <Paper>
           <InputText
             label="Nombre"
@@ -28,9 +29,17 @@ const FiltersUserTypes = ({ filters, setFilters }: Props) => {
             onChange={(name) => setFilters({ ...filters, name })}
           />
         </Paper>
-      </Grid> */}
+      </Grid>
+      <Grid item xs={12} md={6} lg={3}>
+        <Paper>
+          <SelectMpc
+            value={filters.mpc}
+            onChange={(mpc) => setFilters({ ...filters, mpc })}
+          />
+        </Paper>
+      </Grid>
     </Grid>
   );
 };
 
-export default FiltersUserTypes;
+export default FiltersMp;
