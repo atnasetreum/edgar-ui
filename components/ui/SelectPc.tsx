@@ -22,19 +22,19 @@ export default function SelectPc({
   const { notify } = useNotify();
 
   useEffect(() => {
-    if (mainCategoryId && !mp.length) {
+    if (mainCategoryId) {
       MPApi.getAll({ mpcId: mainCategoryId })
         .then(setMp)
         .catch((err) => errorAxios(err, notify));
     }
-  }, [mainCategoryId, notify, mp]);
+  }, [mainCategoryId, notify]);
 
   useEffect(() => {
-    if (!mainCategoryId && mp.length) {
+    if (!mainCategoryId) {
       setMp([]);
       resetValues();
     }
-  }, [mainCategoryId, mp, resetValues]);
+  }, [mainCategoryId, resetValues]);
 
   return (
     <Paper>

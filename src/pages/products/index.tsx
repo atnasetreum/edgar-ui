@@ -93,7 +93,7 @@ export default function ProductPage() {
 
     return {
       name,
-      price,
+      price: Number(price).toFixed(2),
       mainCategoryId: form.mainCategory.id,
       categoryId: form.category.id,
     };
