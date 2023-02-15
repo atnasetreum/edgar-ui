@@ -14,7 +14,6 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import ElemList from "./ElemList";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import PriceChangeIcon from "@mui/icons-material/PriceChange";
 
 export const MainListItems = () => {
   const { user } = React.useContext(AuthContext);
@@ -45,11 +44,6 @@ export const MainListItems = () => {
                   route: "/products/product-categories",
                   icon: <AutoStoriesIcon />,
                   tooltip: "Categorias Secundarias",
-                },
-                {
-                  label: "Precios",
-                  route: "/products/product-prices",
-                  icon: <PriceChangeIcon />,
                 },
               ],
             }}
