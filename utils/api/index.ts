@@ -6,3 +6,4 @@ export * from "./history.api";
 export * from "./main-product-categories.api";
 export * from "./product-categories.api";
 export * from "./product.api";
+export * from "./comanda.api";

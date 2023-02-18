@@ -14,6 +14,9 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import ElemList from "./ElemList";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import TapasIcon from "@mui/icons-material/Tapas";
 
 export const MainListItems = () => {
   const { user } = React.useContext(AuthContext);
@@ -25,6 +28,23 @@ export const MainListItems = () => {
   return (
     <React.Fragment>
       <ElemList label="Inicio" route="/dashboard" icon={<DashboardIcon />} />
+
+      {userType === userTypes.MESERO && (
+        <ElemList
+          label="Comandas"
+          route="/comandas"
+          icon={<TableRestaurantIcon />}
+        />
+      )}
+
+      {userType === userTypes.COCINERO && (
+        <ElemList label="Cocina" route="/cocina" icon={<RestaurantIcon />} />
+      )}
+
+      {userType === userTypes.MIXOLOGO && (
+        <ElemList label="Barra" route="/barra" icon={<TapasIcon />} />
+      )}
+
       {userType === userTypes.ADMIN && (
         <>
           <ListItemsGroup

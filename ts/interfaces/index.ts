@@ -5,3 +5,5 @@ export * from "./history.interfaces";
 export * from "./main-product-categories.interfaces";
 export * from "./product-categories.interfaces";
 export * from "./product.interfaces";
+export * from "./comanda.interfaces";
+export * from "./order.interface";

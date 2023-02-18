@@ -41,7 +41,11 @@ const FiltersProducts = ({ filters, setFilters }: Props) => {
         <SelectPc
           value={filters.category}
           onChange={(category) => setFilters({ ...filters, category })}
-          resetValues={() => setFilters({ ...filters, category: null })}
+          resetValues={() => {
+            if (filters.category) {
+              setFilters({ ...filters, category: null });
+            }
+          }}
           mainCategoryId={filters.mainCategory?.id}
         />
       </Grid>
