@@ -19,6 +19,11 @@ async function create(payload: object) {
   return data as Comanda;
 }
 
+async function addOrder(payload: object) {
+  const { data } = await api.post(`${basePath}/add-order`, payload);
+  return data as Comanda;
+}
+
 async function complete(id: number, payload: object) {
   const { data } = await api.post(`${basePath}/complete/${id}`, payload);
   return data as Comanda;
@@ -29,4 +34,5 @@ export const ComandaApi = {
   create,
   complete,
   getAllOrders,
+  addOrder,
 };

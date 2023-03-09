@@ -15,8 +15,9 @@ import { Grid, Paper } from "@mui/material";
 import AutoCompleteProducts from "./AutoCompleteProducts";
 import TableProductsComanda from "./TableProductsComanda";
 import { useState, useEffect } from "react";
-import { Comanda, Product } from "ts/interfaces";
+import { Comanda, OrderComanda, Product } from "ts/interfaces";
 import { mainCategoriesContants } from "../../constants";
+import TableOrders from "./TableOrders";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -34,7 +35,7 @@ interface Props {
   form: FormComanda;
   setForm: (form: FormComanda) => void;
   createComanda: () => void;
-  comandaCurrent: Comanda | null;
+  orders: OrderComanda[];
 }
 
 export default function ModalComanda({
@@ -44,7 +45,7 @@ export default function ModalComanda({
   form,
   setForm,
   createComanda,
-  comandaCurrent,
+  orders,
 }: Props) {
   const [product, setProduct] = useState<Product | null>(null);
 
@@ -57,6 +58,10 @@ export default function ModalComanda({
   };
 
   useEffect(() => {
+    console.log({ orders });
+  }, [orders]);
+
+  const addProductInComanda = () => {
     if (product) {
       const {
         mainCategory: { name: group },
@@ -70,7 +75,6 @@ export default function ModalComanda({
               {
                 productId: product.id,
                 name: product.name,
-                count: "1",
                 note: "",
               },
             ],
@@ -84,7 +88,6 @@ export default function ModalComanda({
               {
                 productId: product.id,
                 name: product.name,
-                count: "1",
                 note: "",
               },
             ],
@@ -95,27 +98,24 @@ export default function ModalComanda({
         setProduct(null);
       }, 50);
     }
+  };
+
+  useEffect(() => {
+    addProductInComanda();
   }, [product]);
 
-  const disabledProducts = React.useMemo(() => {
-    return [
-      ...form.bebida.map((row) => row.name),
-      ...form.comida.map((row) => row.name),
-    ];
-  }, [form.bebida, form.comida]);
-
-  const deleteProduct = (type: string, name: string) => {
+  const deleteProduct = (type: string, idx: number) => {
     switch (type) {
       case mainCategoriesContants.COMIDAS:
         setForm({
           ...form,
-          comida: [...form.comida.filter((row) => row.name !== name)],
+          comida: [...form.comida.filter((row, index) => index !== idx)],
         });
         break;
       case mainCategoriesContants.BEBIDAS:
         setForm({
           ...form,
-          bebida: [...form.bebida.filter((row) => row.name !== name)],
+          bebida: [...form.bebida.filter((row, index) => index !== idx)],
         });
         break;
     }
@@ -123,20 +123,17 @@ export default function ModalComanda({
 
   const onChangeProduct = (
     type: string,
-    name: string,
+    idx: number,
     value: string,
     key: string
   ) => {
     switch (type) {
       case mainCategoriesContants.COMIDAS:
         const comidaClone = [...form.comida];
-        const idxComida = comidaClone.findIndex((row) => row.name === name);
-        if (idxComida !== -1) {
-          comidaClone[idxComida] = {
-            ...comidaClone[idxComida],
-            [key]: value,
-          };
-        }
+        comidaClone[idx] = {
+          ...comidaClone[idx],
+          [key]: value,
+        };
         setForm({
           ...form,
           comida: comidaClone,
@@ -144,13 +141,10 @@ export default function ModalComanda({
         break;
       case mainCategoriesContants.BEBIDAS:
         const bebidaClone = [...form.bebida];
-        const idxBebida = bebidaClone.findIndex((row) => row.name === name);
-        if (idxBebida !== -1) {
-          bebidaClone[idxBebida] = {
-            ...bebidaClone[idxBebida],
-            [key]: value,
-          };
-        }
+        bebidaClone[idx] = {
+          ...bebidaClone[idx],
+          [key]: value,
+        };
         setForm({
           ...form,
           bebida: bebidaClone,
@@ -185,7 +179,7 @@ export default function ModalComanda({
             onClick={() => handleClose("ok")}
             startIcon={<TableRestaurantIcon />}
           >
-            Crear Comanda
+            {orders.length ? "Crear orden" : "Crear Comanda"}
           </Button>
         </Toolbar>
       </AppBar>
@@ -196,32 +190,32 @@ export default function ModalComanda({
               <AutoCompleteProducts
                 value={product}
                 onChange={(prod) => setProduct(prod)}
-                disabledProducts={disabledProducts}
               />
             </Paper>
           </Grid>
           {!!form.bebida.length && (
             <Grid item xs={12} md={6} lg={6}>
-              <Paper>
-                <TableProductsComanda
-                  label={mainCategoriesContants.BEBIDAS}
-                  data={form.bebida}
-                  deleteProduct={deleteProduct}
-                  onChangeProduct={onChangeProduct}
-                />
-              </Paper>
+              <TableProductsComanda
+                label={mainCategoriesContants.BEBIDAS}
+                data={form.bebida}
+                deleteProduct={deleteProduct}
+                onChangeProduct={onChangeProduct}
+              />
             </Grid>
           )}
           {!!form.comida.length && (
             <Grid item xs={12} md={6} lg={6}>
-              <Paper>
-                <TableProductsComanda
-                  label={mainCategoriesContants.COMIDAS}
-                  data={form.comida}
-                  deleteProduct={deleteProduct}
-                  onChangeProduct={onChangeProduct}
-                />
-              </Paper>
+              <TableProductsComanda
+                label={mainCategoriesContants.COMIDAS}
+                data={form.comida}
+                deleteProduct={deleteProduct}
+                onChangeProduct={onChangeProduct}
+              />
+            </Grid>
+          )}
+          {!!orders.length && (
+            <Grid item xs={12} md={12} lg={12}>
+              <TableOrders orders={orders} />
             </Grid>
           )}
         </Grid>

@@ -12,10 +12,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface Props {
   label: string;
   data: BebidaOrComida[];
-  deleteProduct: (type: string, name: string) => void;
+  deleteProduct: (type: string, idx: number) => void;
   onChangeProduct: (
     type: string,
-    name: string,
+    idx: number,
     value: string,
     key: string
   ) => void;
@@ -38,35 +38,18 @@ export default function TableProductsComanda({
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell>Nombre</StyledTableCell>
-            <StyledTableCell align="center">Cantidad</StyledTableCell>
             <StyledTableCell align="center">Notas adicionales</StyledTableCell>
             <StyledTableCell align="center">Eliminar</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.map((row, idx) => (
             <StyledTableRow
-              key={row.name}
+              key={idx}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <StyledTableCell component="th" scope="row">
                 {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <Paper>
-                  <TextField
-                    inputProps={{ min: 0, style: { textAlign: "center" } }}
-                    type="number"
-                    label="Cantidad"
-                    variant="outlined"
-                    value={row.count}
-                    fullWidth
-                    autoComplete="off"
-                    onChange={({ target: { value } }) =>
-                      onChangeProduct(label, row.name, value, "count")
-                    }
-                  />
-                </Paper>
               </StyledTableCell>
               <StyledTableCell align="center">
                 <Paper>
@@ -79,7 +62,7 @@ export default function TableProductsComanda({
                     inputProps={{ min: 0, style: { textAlign: "center" } }}
                     autoComplete="off"
                     onChange={({ target: { value } }) =>
-                      onChangeProduct(label, row.name, value, "note")
+                      onChangeProduct(label, idx, value, "note")
                     }
                   />
                 </Paper>
@@ -89,7 +72,7 @@ export default function TableProductsComanda({
                   color="error"
                   aria-label="upload picture"
                   component="label"
-                  onClick={() => deleteProduct(label, row.name)}
+                  onClick={() => deleteProduct(label, idx)}
                 >
                   <DeleteIcon />
                 </IconButton>

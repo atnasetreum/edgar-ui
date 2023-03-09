@@ -43,7 +43,7 @@ export default function DetallesTableComida({ comandaCurrent }: Props) {
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {comandaCurrent.orders
+          {/* {comandaCurrent.orders
             .filter(({ type }) => type === "comida")
             .map((comida) => (
               <TableRow
@@ -56,7 +56,7 @@ export default function DetallesTableComida({ comandaCurrent }: Props) {
                 <StyledTableCell>{comida.count}</StyledTableCell>
                 <StyledTableCell>{comida.note}</StyledTableCell>
               </TableRow>
-            ))}
+            ))} */}
         </TableBody>
       </Table>
     </TableContainer>

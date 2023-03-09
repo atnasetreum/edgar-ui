@@ -6,7 +6,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { Comanda } from "ts/interfaces";
-import { useMemo } from "react";
+import { useEffect } from "react";
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -21,9 +21,35 @@ export default function CardTable({
   tableNumber,
   comandas,
 }: Props) {
-  const comanda = useMemo(() => {
-    return comandas.find((comanda) => comanda.mesa === tableNumber);
+  const [comandaCurrent, setComandaCurrent] = React.useState<Comanda | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (comandas.length) {
+      const comanda = comandas.find((comanda) => comanda.mesa === tableNumber);
+      if (comanda) {
+        setComandaCurrent(comanda);
+      }
+    }
   }, [comandas, tableNumber]);
+
+  const TitleState = React.useMemo(() => {
+    let title = "";
+    if (comandaCurrent) {
+      const { orders } = comandaCurrent;
+      const ordersInProgressCount = orders.filter(
+        (order) => order.state === "En Progreso"
+      ).length;
+      const ordersInProgress = !!ordersInProgressCount;
+      title = ordersInProgress
+        ? `${ordersInProgressCount} ${
+            ordersInProgressCount === 1 ? "orden" : "ordenes"
+          } en progreso ...`
+        : "Pendiente por pagar";
+    }
+    return title;
+  }, [comandaCurrent]);
 
   return (
     <Grid
@@ -44,14 +70,20 @@ export default function CardTable({
                 </Typography>
               </Grid>
             </Grid>
-            {comanda && (
+            {comandaCurrent && (
               <Typography variant="subtitle1" color="text.primary">
-                Creada: {comanda.user.name}
+                Creada: {comandaCurrent.user.name}
               </Typography>
             )}
-            <Typography variant="h6" color="primary">
-              {comanda?.state || "Disponible"}
-            </Typography>
+            {comandaCurrent ? (
+              <Typography variant="h6" color="primary">
+                {TitleState}
+              </Typography>
+            ) : (
+              <Typography variant="h6" color="primary">
+                Disponible
+              </Typography>
+            )}
           </CardContent>
           <CardMedia
             component="img"
@@ -61,7 +93,7 @@ export default function CardTable({
               display: { xs: "none", sm: "block" },
             }}
             image={
-              comanda?.state === "En progreso"
+              comandaCurrent?.state === "Pendiente por pagar"
                 ? "https://media.tenor.com/bA2zNFB_9joAAAAM/hasbulla-cooking.gif"
                 : "https://www.collinet-sieges.com/img/products/zoom/1198-table-ref4402-2.jpg"
             }

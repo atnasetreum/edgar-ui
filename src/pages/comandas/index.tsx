@@ -9,11 +9,10 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext, useMemo } from "react";
 import { ComandaApi } from "utils/api";
 import { errorAxios } from "utils/api/errorAxios";
-import { Comanda } from "ts/interfaces";
+import { Comanda, OrderComanda } from "ts/interfaces";
 
 export interface BebidaOrComida {
   productId: number;
-  count: string;
   name: string;
   note: string;
 }
@@ -39,6 +38,7 @@ export default function ComandasPage() {
   const router = useRouter();
   const [comandas, setComandas] = useState<Comanda[]>([]);
   const [comandaCurrent, setComandaCurrent] = useState<Comanda | null>(null);
+  const [orders, setOrders] = useState<OrderComanda[]>([]);
 
   const getComandas = () => {
     ComandaApi.getAll({})
@@ -67,33 +67,70 @@ export default function ComandasPage() {
     setIsOpen(false);
     setTableSelected(0);
     setComandaCurrent(null);
+    setOrders([]);
   };
 
   const createComanda = () => {
+    if (!form.bebida.length && !form.comida.length) {
+      return notify(
+        `No se puede crear una ${
+          orders.length ? "orden" : "comanda"
+        } sin productos`
+      );
+    }
+
     const removeName = (row: BebidaOrComida) => ({
       productId: Number(row.productId),
-      count: Number(row.count),
       note: row.note,
     });
 
-    ComandaApi.create({
-      mesa: form.mesa,
-      bebida: form.bebida.map(removeName),
-      comida: form.comida.map(removeName),
-    })
-      .then(() => {
-        notify("Comanda creada correctamente", "success");
-        closeModal();
-        getComandas();
+    if (!orders.length) {
+      // Create comanda
+      ComandaApi.create({
+        mesa: form.mesa,
+        bebida: form.bebida.map(removeName),
+        comida: form.comida.map(removeName),
       })
-      .catch((err) => errorAxios(err, notify));
+        .then(() => {
+          notify("Comanda creada correctamente", "success");
+          closeModal();
+          getComandas();
+        })
+        .catch((err) => errorAxios(err, notify));
+    } else if (comandaCurrent) {
+      // Add order
+      ComandaApi.addOrder({
+        comandaId: comandaCurrent.id,
+        bebida: form.bebida.map(removeName),
+        comida: form.comida.map(removeName),
+      })
+        .then(() => {
+          notify("Orden agregada correctamente", "success");
+          closeModal();
+          getComandas();
+        })
+        .catch((err) => errorAxios(err, notify));
+    }
   };
 
   useEffect(() => {
     if (tableSelected) {
-      setForm({ ...form, mesa: tableSelected });
+      const comanda = comandas.find(
+        (comanda) => comanda.mesa === tableSelected
+      );
+      if (comanda) {
+        setComandaCurrent(comanda);
+      }
+
+      setForm((old) => ({ ...old, mesa: tableSelected }));
     }
-  }, [tableSelected]);
+  }, [tableSelected, comandas]);
+
+  useEffect(() => {
+    if (comandaCurrent) {
+      setOrders(comandaCurrent.orders);
+    }
+  }, [comandaCurrent]);
 
   return (
     <MainLayout title="Comandas">
@@ -104,7 +141,7 @@ export default function ComandasPage() {
         setForm={setForm}
         closeModal={closeModal}
         createComanda={createComanda}
-        comandaCurrent={comandaCurrent}
+        orders={orders}
       />
       <Grid container spacing={3}>
         {[1, 2, 3, 4, 5, 6].map((table) => (
